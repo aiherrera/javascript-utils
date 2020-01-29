@@ -3,54 +3,39 @@ import './style.css';
 
 /**
  * Returns an array filled with numbers between two points
- * ex. 2-9 -> [2,3,4,5,6,7,8,9]
+ * ex. 2-9 => [2,3,4,5,6,7,8,9]
  */
-export function createRange(start, end) {
-  return Array(end - start + 1).fill().map((_, idx) => start + idx)
-}
+const createRange = (start, end) => Array(end - start).fill().map((_, idx) => start + idx + 1);
+
+/**
+ * Function for concat subarrays into a single one
+ * ex. [[2,3],[4,7,8,9],[1],[22,33]] => [2,3,4,7,8,9,1,22,33]
+ */
+const joinArrayOfArrays = (arrays = []) => [].concat(...arrays);
 
 /**
  * Validator
  */
 export function checkNumbersOrder(control) {
 
-  // console.log(control);
-
-  let test = control.split('-');
-  console.log(test);
+  let controlArray = control.split('-').map(value => value.split(',').map(Number));
 
   let finalArray = [];
 
-  if (test.length > 1) {
-    for (const [index, val] of test.entries()) {
-      // console.log(val);
-
-      const convertToInt = val.split(',').map(Number);
-      console.log(convertToInt);
-      finalArray = [...finalArray, ...convertToInt];
-      console.log(convertToInt.pop())
-      finalArray = [...finalArray, ...createRange(convertToInt.pop(), test[index + 1])];
-      finalArray = finalArray.sort((a, b) => a - b);
-
-      console.log(finalArray);
-      
+  if (controlArray.length > 1) {
+    for (const [index, val] of Object.entries(controlArray)) {
+      finalArray = [...finalArray, ...val];
+      if (parseInt(index)+1 < controlArray.length) {
+        finalArray = [...finalArray, ...createRange(val.pop(), controlArray[parseInt(index)+1].shift())];
+      }
     }
-    // console.log(test[0].split(',').map(Number).pop())
-
-    // console.log(
-    //   range(4, 8)
-    // );
-
-    // console.log(test);
   } else {
-    finalArray = control.split(/[-,*]+/).sort((a, b) => a - b);
+    finalArray = control.split(/[-,*]+/);
   }
 
-  // console.log(finalArray);
+  console.log(finalArray);
+  console.log([...new Set(finalArray)]);
+  // return [...new Set(finalArray.sort((a, b) => a - b))];
 
 }
-
-// Write Javascript code!
-// const appDiv = document.getElementById('app');
-// appDiv.innerHTML = `<h1>JS Starter</h1>`;
-checkNumbersOrder('1,2,3');
+checkNumbersOrder('1,4,2,6-8,4,9,10-15,19-23');
