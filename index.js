@@ -18,7 +18,7 @@ const joinArrayOfArrays = (arrays = []) => [].concat(...arrays);
  */
 export function checkNumbersOrder(control) {
 
-  let controlArray = control.split('-').map(value => value.split(',').map(Number));
+  let controlArray = control.split('-').map((value, index) => value.split(',').map(Number));
 
   let finalArray = [];
 
@@ -33,8 +33,8 @@ export function checkNumbersOrder(control) {
     finalArray = control.split(/[-,*]+/);
   }
 
-  console.log(finalArray);
-  console.log([...new Set(finalArray)]);
+  console.log(finalArray.sort((a, b) => a - b));
+  // console.log([...new Set(finalArray)]);
   // return [...new Set(finalArray.sort((a, b) => a - b))];
 
 }
